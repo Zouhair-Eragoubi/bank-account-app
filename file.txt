@@ -1,0 +1,32 @@
+cd discovery-service
+mvn clean package -DskipTests
+docker build . -t eureka-discovery-service:v1
+docker images
+docker run -d -p 8761:8761 eureka-discovery-service:v1
+docker ps
+docker stop **id
+
+
+cd Account-service
+mvn clean package -DskipTests
+docker build . -t account-service:v1
+docker images
+docker run -d -p 8082:8082 account-service:v1
+
+cd Customer-service
+mvn clean package -DskipTests
+docker build . -t customer-service:v1
+docker images
+docker run -d -p 8081:8081 customer-service:v1
+
+cd config-service
+mvn clean package -DskipTests
+docker build . -t config-service:v1
+docker images
+docker run -d -p 9999:9999 config-service:v1
+
+cd gatway-service
+mvn clean package -DskipTests
+docker build . -t gatway-service:v1
+docker images
+docker run -d -p 9999:9999 gatway-service:v1
