@@ -2,13 +2,16 @@ package org.example.Accountservice.web;
 
 import org.example.Accountservice.client.CustomerRestClient;
 import org.example.Accountservice.entities.BankAccount;
+import org.example.Accountservice.enums.AccountType;
 import org.example.Accountservice.model.Customer;
 import org.example.Accountservice.repositories.BankAccountRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class AccountRestController {
@@ -36,5 +39,30 @@ public class AccountRestController {
         bankAccount.setCustomer(customer);
         return bankAccount;
     }
+
+    @GetMapping("/save")
+    public void saveBankAccount(){
+        customerRestClient.allCustomers().forEach(c->{
+            BankAccount bankAccount=BankAccount.builder()
+                    .accountId(UUID.randomUUID().toString())
+                    .type(AccountType.SAVING_ACCOUNT)
+                    .currency("MAD")
+                    .balance(Math.random()*56789)
+                    .customerId(c.getId())
+                    .createAt(new Date())
+                    .build();
+            BankAccount bankAccount2=BankAccount.builder()
+                    .accountId(UUID.randomUUID().toString())
+                    .type(AccountType.CURRENT_ACCOUNT)
+                    .currency("MAD")
+                    .balance(Math.random()*90000)
+                    .customerId(c.getId())
+                    .createAt(new Date())
+                    .build();
+            bankAccountRepository.save(bankAccount);
+            bankAccountRepository.save(bankAccount2);
+        });
+    }
+
 }
 

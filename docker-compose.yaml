@@ -49,6 +49,8 @@ services:
     environment:
       - DISCOVERY_SERVICE_URL=http://bank-discovery-service:8761/eureka
       - CONFIG_SERVICE_URL=http://bank-config-service:9999
+    healthcheck:
+      test: [ "CMD","curl","-f","http://localhost:8082/actuator/health" ]
     depends_on:
       customer-service:
         condition: service_healthy
@@ -63,6 +65,8 @@ services:
       - DISCOVERY_SERVICE_URL=http://bank-discovery-service:8761/eureka
       - CONFIG_SERVICE_URL=http://bank-config-service:9999
     depends_on:
+      bank-discovery-service:
+        condition: service_healthy
       bank-config-service:
         condition: service_healthy
 
